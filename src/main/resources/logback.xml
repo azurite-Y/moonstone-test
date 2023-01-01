@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p [%23.23t] %-45.45logger{39} : %m%n</pattern>
+            <!-- <pattern>%d{HH:mm:ss} [%thread] \t%-5level %logger{5} - %msg%n</pattern> -->        
+		</encoder>
+    </appender>
+
+	<!-- 将日志写入日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>src/main/resources/logs/test.log</file>
+        <append>false</append><!-- 日志追加 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p [%23.23t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 特定于 com.zy 包下所有类的日志输出级别为DEBUG -->
+    <logger name="com.zy" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <!-- 特定于 com.zy 包下所有类的日志输出级别为DEBUG -->
+    <logger name="io.netty" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <!-- 特定于 LoggingHandler 类的日志输出级别为DEBUG -->
+   <!--  <logger name="io.netty.handler.logging.LoggingHandler" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger> -->
+
+    <!-- 全局的日志输出级别为ERROR -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

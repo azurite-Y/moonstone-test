@@ -4,7 +4,7 @@
 
 [moonstone](https://gitee.com/azurite_y/moonstone) 内嵌到 Fluorite 中作为 Servlet Web 容器运作的测试项目，但是运行本项目时有以下要求：
 
-1. 当前项目还无法运行于 IDEA 只能运行在 Eclipse。而且必须先导入 Fluorite、Moonstone 项目到 Eclipse 工作空间。其原因参见 [FluoriteTest](https://gitee.com/azurite_y/FluoriteTest)。
+1. 当前项目还无法运行于 IDEA 只能运行在 Eclipse。而且必须先导入 Fluorite、Moonstone 项目到 Eclipse 工作空间。其原因参见 [fluorite-test](https://gitee.com/azurite_y/fluorite-test)。
 
 ## 使用测试
 
@@ -72,7 +72,8 @@ private void initServletMapping() {
 			resp.getWriter().print("[cookies] Running -  Self Cookie Add");				
 		}
 	});
-		
+
+    
 	//--
 	ServletMapping fileUpload = new ServletMapping("/fileUpload", true);
 	servletStaticResourceMapping.put("/fileUpload", fileUpload);
@@ -107,7 +108,8 @@ private void initServletMapping() {
 		}
 	});
 		
-	//--
+	
+    //--
 	ServletMapping forwardToFileDownload = new ServletMapping("/forwardToFileDownload");
 	servletStaticResourceMapping.put("/forwardToFileDownload", forwardToFileDownload);
 	forwardToFileDownload.setCallback(new HttpServletServiceCallback() {
@@ -122,8 +124,7 @@ private void initServletMapping() {
 		}
 	});
 
-
-​		
+    
 	//--
 	ServletMapping redirectToFileDownload = new ServletMapping("/redirectToFileDownload");
 	servletStaticResourceMapping.put("/redirectToFileDownload", redirectToFileDownload);
@@ -139,7 +140,6 @@ private void initServletMapping() {
 	});
 
 
-​		
 	//--
 	ServletMapping fileDownloadInclude = new ServletMapping("/include/fileDownload");
 	servletStaticResourceMapping.put("/include/fileDownload", fileDownloadInclude);
@@ -157,7 +157,6 @@ private void initServletMapping() {
 	});
 
 
-​		
 	//--
 	ServletMapping requestIncludeDispatcher = new ServletMapping("/include/requestDispatcher");
 	servletStaticResourceMapping.put("/include/requestDispatcher", requestIncludeDispatcher);

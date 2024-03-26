@@ -2,7 +2,7 @@
 
 ## 介绍
 
-[Moonstone](https://gitee.com/azurite_y/Moonstone) 内嵌到 Fluorite 中作为 Servlet Web 容器运作的测试项目，但是运行本项目时有以下要求：
+[moonstone](https://gitee.com/azurite_y/moonstone) 内嵌到 Fluorite 中作为 Servlet Web 容器运作的测试项目，但是运行本项目时有以下要求：
 
 1. 当前项目还无法运行于 IDEA 只能运行在 Eclipse。而且必须先导入 Fluorite、Moonstone 项目到 Eclipse 工作空间。其原因参见 [FluoriteTest](https://gitee.com/azurite_y/FluoriteTest)。
 

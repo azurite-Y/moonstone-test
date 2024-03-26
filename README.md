@@ -1,42 +1,30 @@
 # MoonstoneTest
 
-#### 介绍
-[Moonstone](https://gitee.com/azurite_y/MoonStone) 内嵌到Fluorite中作为Servlet Web 容器运作的测试项目
+## 介绍
+
+[Moonstone](https://gitee.com/azurite_y/Moonstone) 内嵌到 Fluorite 中作为 Servlet Web 容器运作的测试项目，但是运行本项目时有以下要求：
+
+1. 当前项目还无法运行于 IDEA 只能运行在 Eclipse。而且必须先导入 Fluorite、Moonstone 项目到 Eclipse 工作空间。其原因参见 [FluoriteTest](https://gitee.com/azurite_y/FluoriteTest)。
+
+## 使用测试
+
+1. 该项目有预置了静态资源和静态网页，可使用如下 URL 测试
+
+| URL                                             | Method                                      |
+| ----------------------------------------------- | ------------------------------------------- |
+| http://localhost:8888/images/head.jpg           | [GET]                                       |
+| http://localhost:8888/cookies                   | [GET、POST]                                 |
+| http://localhost:8888/fileUpload                | [GET、POST]                                 |
+| http://localhost:8888/fileDownload              | [GET、POST]                                 |
+| http://localhost:8888/forwardToFileDownload     | [GET] -- 测试Forward                        |
+| http://localhost:8888/redirectToFileDownload    | [GET] -- 测试Redirect                       |
+| http://localhost:8888/include/fileDownload      | [GET] -- 测试RequestDispatcher的include功能 |
+| http://localhost:8888/include/requestDispatcher | [GET] -- 测试RequestDispatcher的include功能 |
 
 
-#### 运行教程
+实现上述URL功能的Moonstone-DefaultServlet方法
 
-1.  克隆运行 MoonStoneApp
-```java
-@RunnerAs
-public class MoonStoneApp {
-	@Autowired
-	private User user;
-	
-	@Autowired
-	private ServerProperties serverProperties;
-	
-	public static void main(String[] args) throws IOException {
-		ConfigurableApplicationContext run = FluoriteApplication.run(MoonStoneApp.class, args);
-		MoonStoneApp bean = run.getBean(MoonStoneApp.class);
-		// 验证 @ConfigurationProperties
-		System.out.println(bean.user);
-		System.out.println(bean.serverProperties.getPort());
-	}
-}
-```
-2. 该项目有预置了静态资源和静态网页，可使用如下URL测试
-```java
-2.1. http://localhost:8888/images/head.jpg            	[GET]
-2.2. http://localhost:8888/cookies                    	[GET、POST]
-2.3. http://localhost:8888/fileUpload 					[GET、POST]
-2.4. http://localhost:8888/fileDownload 				[GET、POST]
-2.5. http://localhost:8888/forwardToFileDownload 		[GET] -- 测试Forward
-2.6. http://localhost:8888/redirectToFileDownload 		[GET] -- 测试Redirect
-2.7. http://localhost:8888/include/fileDownload 		[GET] -- 测试RequestDispatcher的include功能
-2.8. http://localhost:8888/include/requestDispatcher 	[GET] -- 测试RequestDispatcher的include功能
-```
-实现上述URL功能的MoonStone-DefaultServlet方法
+
 ```java
 @Override
 private void initServletMapping() {
@@ -49,7 +37,7 @@ private void initServletMapping() {
 	cookies.setPostCallback(new HttpServletServicePostCallback() {
 		@Override
 		public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-        IOException {
+	    IOException {
 			Cookie[] cookiesObj = req.getCookies();
 			for (Cookie cookie : cookiesObj) {
 				System.out.println("====");
@@ -61,7 +49,7 @@ private void initServletMapping() {
 				boolean secure = cookie.getSecure();
 				int version = cookie.getVersion();
 				String comment = cookie.getComment();
-
+	
 				System.out.println("cookieName：" + cookieName);
 				System.out.println("value：" + value);
 				System.out.println("domain：" + domain);
@@ -72,15 +60,15 @@ private void initServletMapping() {
 				System.out.println("comment：" + comment);
 				System.out.println("====");
 			}
-
+	
 			Cookie cookie = new Cookie("MYSELFCOOKIE", "123456789");
 			cookie.setMaxAge(60 * 60 * 24); // 一天后过期
 			cookie.setPath("/"); // 在这个路径下面的页面才可以访问该Cookie
 			// 如果设置了"HttpOnly"属性，那么通过程序(JS脚本、Applet等)将无法访问该Cookie
-            cookie.setHttpOnly(false);  
-            
+	        cookie.setHttpOnly(false);  
+	        
 			resp.addCookie(cookie);
-
+	
 			resp.getWriter().print("[cookies] Running -  Self Cookie Add");				
 		}
 	});
@@ -91,13 +79,13 @@ private void initServletMapping() {
 	fileUpload.setPostCallback(new HttpServletServicePostCallback() {
 		@Override
 		public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-        IOException {
+	    IOException {
 			Map<String, String[]> parameterMap = req.getParameterMap();
 			Enumeration<String> parameterNames = req.getParameterNames();
 			while(parameterNames.hasMoreElements()) {
 				String parameterName = parameterNames.nextElement();
 				logger.info("paramete. {}: {}", parameterName, 
-                            Arrays.asList(parameterMap.get(parameterName) ));
+	                        Arrays.asList(parameterMap.get(parameterName) ));
 			}
 				
 			System.out.println("==Part==");
@@ -125,38 +113,40 @@ private void initServletMapping() {
 	forwardToFileDownload.setCallback(new HttpServletServiceCallback() {
 		@Override
 		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-        IOException {
+	    IOException {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Forward Request. request: {}, forwardReq: {}", req.getRequestURI(), "/fileDownload");
 			}
-
+	
 			req.getRequestDispatcher("/fileDownload").forward(req, resp);				
 		}
 	});
-		
-		
+
+
+​		
 	//--
 	ServletMapping redirectToFileDownload = new ServletMapping("/redirectToFileDownload");
 	servletStaticResourceMapping.put("/redirectToFileDownload", redirectToFileDownload);
 	redirectToFileDownload.setCallback(new HttpServletServiceCallback() {
 		@Override
 		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-        IOException {
+	    IOException {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Redirect Request. request: {}, redirectReq: {}", req.getRequestURI(), "/fileDownload");
 			}
 			resp.sendRedirect("/fileDownload");				
 		}
 	});
-		
-		
+
+
+​		
 	//--
 	ServletMapping fileDownloadInclude = new ServletMapping("/include/fileDownload");
 	servletStaticResourceMapping.put("/include/fileDownload", fileDownloadInclude);
 	fileDownloadInclude.setCallback(new HttpServletServiceCallback() {
 		@Override
 		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, 
-        IOException {
+	    IOException {
 			req.setAttribute("includeKey", "fileDownloadInclude-value");
 				
 			if (logger.isDebugEnabled()) {
@@ -165,15 +155,16 @@ private void initServletMapping() {
 			resp.getWriter().print("[fileDownloadInclude] Running");				
 		}
 	});
-		
-		
+
+
+​		
 	//--
 	ServletMapping requestIncludeDispatcher = new ServletMapping("/include/requestDispatcher");
 	servletStaticResourceMapping.put("/include/requestDispatcher", requestIncludeDispatcher);
 	requestIncludeDispatcher.setCallback(new HttpServletServiceCallback() {
 		@Override
 		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, 
-        IOException {
+	    IOException {
 			req.getRequestDispatcher("/include/fileDownload").include(req, resp);
 				
 			Object attribute = req.getAttribute("includeKey");
@@ -185,10 +176,3 @@ private void initServletMapping() {
 	});
 }
 ```
-
-
-#### 使用说明
-
-1.  当前Fluorite还未开发出如SpringMVC那样的Servlet封装支持，所以当前只能使用MoonStone自带的 DefaultServlet 响应请求。所以静态资源和请求的响应都由其完成。但resources目录下的static和templates目录下的资源，如果有的话MoonStone会自动挂载到根目录下，以符合Servlet映射要求。
-2.  当前对内嵌MoonStone的配置粒度有限，参见Fluorite-autoconfigure包下org.zy.fluorite.autoconfigure.web.ServerProperties类
-3.  对于响应请求支持基本的Context-Length报文格式和Chunked格式。支持GZIP压缩处理

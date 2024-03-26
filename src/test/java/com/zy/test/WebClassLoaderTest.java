@@ -1,12 +1,9 @@
 package com.zy.test;
 
 import org.junit.jupiter.api.Test;
-import org.zy.fluorite.autoconfigure.web.server.moonstone.MoonStoneEmbeddedWebappClassLoader;
-import org.zy.fluorite.core.utils.ClassUtils;
-import org.zy.moonStone.core.container.context.StandardContext;
-import org.zy.moonStone.core.exceptions.LifecycleException;
-import org.zy.moonStone.core.loaer.WebappLoader;
-import org.zy.moonStone.core.webResources.StandardRoot;
+import org.zy.moonstone.core.container.context.StandardContext;
+import org.zy.moonstone.core.loaer.WebappLoader;
+import org.zy.moonstone.core.webResources.StandardRoot;
 
 /**
  * @dateTime 2022年12月20日;
@@ -17,7 +14,8 @@ import org.zy.moonStone.core.webResources.StandardRoot;
  */
 @SuppressWarnings("unused")
 public class WebClassLoaderTest {
-	private String classPath = "D:\\Workspace\\Eclipse\\MoonStoneApp\\target\\classes";
+	
+	private String classPath = ClassLoader.getSystemResource("").getFile();
 	
 	private StandardContext standardContext = new StandardContext();
 	private StandardRoot standardRoot = new StandardRoot(standardContext);
